@@ -7,30 +7,43 @@
 
 char **qsr_parse(char *cmd)
 {
-    char **buffer = malloc(BUFSIZE * sizeof(char *));
     int position = 0;
+    size_t bufsize = BUFSIZE;
+    char **args = malloc(bufsize * sizeof(char *));
 
     char *arg = strtok(cmd, DELIM);
 
     while (arg != NULL)
     {
-        buffer[position] = arg;
+        args[position] = arg;
         position++;
+        if (position >= bufsize)
+        {
+            bufsize += BUFSIZE;
+            args = realloc(args, bufsize * sizeof(char *));
+            if (!args)
+            {
+                fprintf(stderr, "qsh: allocation error\n");
+                exit(EXIT_FAILURE);
+            }
+        }
         arg = strtok(NULL, DELIM);
     }
 
+    args[position] = NULL;
+
     for (int i = 0; i < position; i++)
     {
-        printf("Parsed : %s\n", buffer[i]);
+        printf("Parsed : %s\n", args[i]);
     }
 
-    return buffer;
+    return args;
 }
 
 int main(void)
 {
-    char cmd[] = "ls -la /cd";
-    qsr_parse(cmd);
-    free(cmd);
+    char cmd[] = "ls -la /cd keyboard";
+    char **args = qsr_parse(cmd);
+    free(args);
     return 0;
 }

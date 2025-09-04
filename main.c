@@ -1,6 +1,7 @@
 #include <stdio.h>
-
-// RPEL - Read, Parse, Execute, Loop
+#include "qsh_execute.c"
+#include "qsh_parse.c"
+#include "qsh_read.c"
 
 int main(void)
 {
@@ -13,10 +14,12 @@ int main(void)
         printf("qsh> ");
         cmd = qsh_read();
         args = qsh_parse(cmd);
-        status = qsh_staus(args);
+        status = qsh_execute(args);
 
         free(cmd);
         free(args);
         free(status);
     } while (status);
+
+    return EXIT_SUCCESS;
 }

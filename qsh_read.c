@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define BUFSIZE 1024
+#define BUFFFSIZE 1
 
 char *qsh_read()
 {
-    char *buffer = malloc(BUFSIZE * sizeof(char));
-    char c;
+    size_t bufsize = BUFFFSIZE;
+    char *buffer = malloc(bufsize * sizeof(char));
     int position = 0;
+    int c;
 
     if (!buffer)
     {
@@ -15,24 +16,25 @@ char *qsh_read()
         exit(EXIT_FAILURE);
     }
 
-    c = getchar();
-    while (c != '\n' && c != EOF)
+    while ((c = getchar()) != '\n' && c != EOF)
     {
         buffer[position] = c;
         position++;
-        if (position >= BUFSIZE)
+        if (position >= bufsize)
         {
-            buffer = realloc(buffer, BUFSIZE);
+            bufsize += BUFFFSIZE;
+            buffer = realloc(buffer, bufsize * sizeof(char));
             if (!buffer)
             {
                 fprintf(stderr, "qsh: allocation error\n");
                 exit(EXIT_FAILURE);
             }
         }
-        c = getchar();
     }
+    buffer[position] = '\0';
 
     printf("You entered: %s\n", buffer);
+
     return buffer;
 }
 
