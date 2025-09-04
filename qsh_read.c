@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define BUFFFSIZE 1
+#define BUFFFSIZE 1024
 
 char *qsh_read()
 {
@@ -33,14 +33,14 @@ char *qsh_read()
     }
     buffer[position] = '\0';
 
-    printf("You entered: %s\n", buffer);
+    // printf("You entered: %s\n", buffer);
 
     return buffer;
 }
 
-int main(void)
-{
-    char *cmd = qsh_read();
-    free(cmd);
-    return 0;
-}
+// int main(void)
+// {
+//     char *cmd = qsh_read();
+//     free(cmd);
+//     return 0;
+// }

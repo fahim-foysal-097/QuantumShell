@@ -5,7 +5,7 @@
 #define BUFSIZE 1024
 #define DELIM " \t\r\n\a"
 
-char **qsr_parse(char *cmd)
+char **qsh_parse(char *cmd)
 {
     int position = 0;
     size_t bufsize = BUFSIZE;
@@ -32,18 +32,18 @@ char **qsr_parse(char *cmd)
 
     args[position] = NULL;
 
-    for (int i = 0; i < position; i++)
-    {
-        printf("Parsed : %s\n", args[i]);
-    }
+    // for (int i = 0; i < position; i++)
+    // {
+    //     printf("Parsed : %s\n", args[i]);
+    // }
 
     return args;
 }
 
-int main(void)
-{
-    char cmd[] = "ls -la /cd keyboard";
-    char **args = qsr_parse(cmd);
-    free(args);
-    return 0;
-}
+// int main(void)
+// {
+//     char cmd[] = "ls -la /cd keyboard";
+//     char **args = qsr_parse(cmd);
+//     free(args);
+//     return 0;
+// }

@@ -3,7 +3,15 @@
 #include "qsh_parse.c"
 #include "qsh_read.c"
 
+void qsh_loop(void);
+
 int main(void)
+{
+    qsh_loop();
+    return EXIT_SUCCESS;
+}
+
+void qsh_loop(void)
 {
     char *cmd;
     char **args;
@@ -18,8 +26,5 @@ int main(void)
 
         free(cmd);
         free(args);
-        free(status);
     } while (status);
-
-    return EXIT_SUCCESS;
 }
