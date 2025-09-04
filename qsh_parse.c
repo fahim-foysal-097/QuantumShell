@@ -5,6 +5,12 @@
 #define BUFSIZE 1024
 #define DELIM " \t\r\n\a"
 
+/**
+ * @brief Parses a command string into an array of arguments.
+ *
+ * @param cmd The command string to parse. This string will be modified.
+ * @return char** An array of argument strings, terminated by NULL. Must be freed by the caller.
+ */
 char **qsh_parse(char *cmd)
 {
     int position = 0;

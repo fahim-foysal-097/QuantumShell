@@ -11,6 +11,9 @@ int main(void)
     return EXIT_SUCCESS;
 }
 
+/// @brief Main loop for the QuantumShell.
+/// Continuously reads, parses, and executes commands until exit.
+/// @param None
 void qsh_loop(void)
 {
     char *cmd;

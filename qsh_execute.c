@@ -1,23 +1,37 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include "builtins.c"
+#include "builtin.c"
 
+char *builtin_func_list[] = {
+    "cd",
+    "help",
+    "exit",
+};
+
+int (*builtin_func[])(char **) = {
+    &qsh_cd,
+    &qsh_help,
+    &qsh_exit,
+};
+
+int qsh_func_count(void)
+{
+    return sizeof(builtin_func_list) / sizeof(char *);
+}
+
+int new_process(char **args);
+
+/**
+ * @brief Executes shell built-in or launches a program.
+ * @param args Null-terminated array of argument strings.
+ * @return Status code: 1 to continue execution, 0 to exit shell.
+ */
 int qsh_execute(char **args)
 {
-    char *builtin_func_list[] = {
-        "cd",
-        // "env",
-        "help",
-        "exit"};
-
-    int (*builtin_func[])(char **) = {
-        &qsh_cd,
-        // &qsh_env,
-        &qsh_help,
-        &qsh_exit};
 
     int i;
 
@@ -27,9 +41,9 @@ int qsh_execute(char **args)
         return 1;
     }
 
-    for (i = 0; i < sizeof(builtin_func_list) / sizeof(char *); i++) // dynamically calculates the number of functions
+    for (i = 0; i < qsh_func_count(); i++) // dynamically calculates the number of functions
     {
-        if (strcmp(args[0], builtin_func[i]) == 0)
+        if (strcmp(args[0], builtin_func_list[i]) == 0)
         {
             return (*builtin_func[i])(args);
         }
@@ -38,6 +52,11 @@ int qsh_execute(char **args)
     return new_process(args);
 }
 
+/**
+ * @brief Creates a new process to execute a command.
+ * @param args Null-terminated array of argument strings.
+ * @return Status code: 1 to continue execution.
+ */
 int new_process(char **args)
 {
     pid_t pid, wpid;

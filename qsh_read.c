@@ -1,11 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define BUFFFSIZE 1024
+#define BUFSIZE 1024
 
+/**
+ * @brief Reads a line of input from stdin.
+ * @return Pointer to the dynamically allocated input string. Caller must free.
+ */
 char *qsh_read()
 {
-    size_t bufsize = BUFFFSIZE;
+    size_t bufsize = BUFSIZE;
     char *buffer = malloc(bufsize * sizeof(char));
     int position = 0;
     int c;
@@ -22,7 +26,7 @@ char *qsh_read()
         position++;
         if (position >= bufsize)
         {
-            bufsize += BUFFFSIZE;
+            bufsize += BUFSIZE;
             buffer = realloc(buffer, bufsize * sizeof(char));
             if (!buffer)
             {
