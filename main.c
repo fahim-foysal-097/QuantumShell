@@ -2,11 +2,17 @@
 #include "qsh_execute.c"
 #include "qsh_parse.c"
 #include "qsh_read.c"
+#include "load_config.c"
 
 void qsh_loop(void);
 
 int main(void)
 {
+
+    // char *args[] = {"pwd", NULL};
+    // new_process(args);
+    load_config(".qshrc");
+
     qsh_loop();
     return EXIT_SUCCESS;
 }
@@ -22,6 +28,10 @@ void qsh_loop(void)
 
     do
     {
+        printf("\n");
+        char *a[] = {"", NULL};
+        qsh_pwd(a);
+
         printf("qsh> ");
         cmd = qsh_read();
         args = qsh_parse(cmd);

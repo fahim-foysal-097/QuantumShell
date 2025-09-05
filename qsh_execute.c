@@ -10,12 +10,14 @@ char *builtin_func_list[] = {
     "cd",
     "help",
     "exit",
+    "pwd"
 };
 
 int (*builtin_func[])(char **) = {
     &qsh_cd,
     &qsh_help,
     &qsh_exit,
+    &qsh_pwd
 };
 
 int qsh_func_count(void)
@@ -41,7 +43,7 @@ int qsh_execute(char **args)
         return 1;
     }
 
-    for (i = 0; i < qsh_func_count(); i++) // dynamically calculates the number of functions
+    for (i = 0; i < qsh_func_count(); i++)
     {
         if (strcmp(args[0], builtin_func_list[i]) == 0)
         {
