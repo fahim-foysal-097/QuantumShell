@@ -13,6 +13,6 @@
  *
  * @param filename path to config file (e.g. ".qshrc")
  */
-void load_config_once(const char *filename);
+void load_config(const char *filename);
 
 #endif // QSH_CONFIG_H

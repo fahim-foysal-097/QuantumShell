@@ -83,7 +83,7 @@ int qsh_source(char **args)
     const char *file = ".qshrc";
     if (args && args[1])
         file = args[1];
-    load_config_once(file);
+    load_config(file);
     return 1;
 }
 

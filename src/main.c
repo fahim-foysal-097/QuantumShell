@@ -1,21 +1,30 @@
 #define _POSIX_C_SOURCE 200809L
+#include <stdio.h>
+#include <stdlib.h>
 #include "parse.h"
 #include "read.h"
 #include "execute.h"
 #include "alias.h"
 #include "config.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include "builtins.h"
 
 static void qsh_loop(void);
 
 int main(void)
 {
-    /* load once at startup */
-    load_config_once(".qshrc");
+    /* load config at startup */
+    char config_path[1024];
+    const char *home = getenv("HOME"); // get home directory
 
+    if (home)
+    {
+        snprintf(config_path, sizeof(config_path), "%s/.qshrc", home);
+        load_config(config_path);
+    }
+
+    /* main loop */
     qsh_loop();
+
     return EXIT_SUCCESS;
 }
 

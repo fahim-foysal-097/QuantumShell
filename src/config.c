@@ -11,7 +11,7 @@
  *
  * Each non-empty, non-comment line is parsed and executed.
  */
-void load_config_once(const char *filename)
+void load_config(const char *filename)
 {
     FILE *fp = fopen(filename, "r");
     if (!fp)
