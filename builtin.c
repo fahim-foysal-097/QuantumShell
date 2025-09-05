@@ -2,12 +2,15 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include "alias.c"
 
 char *func_list[] = {
     "cd",
     "help",
     "exit",
-    "pwd"};
+    "pwd",
+    "alias",
+};
 
 /// @brief Changes the current working directory.
 /// @param args Arguments passed to the cd command.

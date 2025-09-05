@@ -10,14 +10,16 @@ char *builtin_func_list[] = {
     "cd",
     "help",
     "exit",
-    "pwd"
+    "pwd",
+    "alias",
 };
 
 int (*builtin_func[])(char **) = {
     &qsh_cd,
     &qsh_help,
     &qsh_exit,
-    &qsh_pwd
+    &qsh_pwd,
+    &qsh_alias,
 };
 
 int qsh_func_count(void)
@@ -42,6 +44,8 @@ int qsh_execute(char **args)
         // empty command
         return 1;
     }
+    
+    expand_alias(args);
 
     for (i = 0; i < qsh_func_count(); i++)
     {
@@ -50,7 +54,6 @@ int qsh_execute(char **args)
             return (*builtin_func[i])(args);
         }
     }
-
     return new_process(args);
 }
 
