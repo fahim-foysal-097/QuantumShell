@@ -12,7 +12,7 @@
 
 /* Builtin registration (uses functions in builtins.c) */
 static char *builtin_names[] = {
-    "cd", "help", "exit", "pwd", "alias", "source"};
+    "cd", "help", "exit", "pwd", "alias", "source", "echo"};
 
 extern int qsh_cd(char **);
 extern int qsh_help(char **);
@@ -22,7 +22,7 @@ extern int qsh_alias_builtin(char **);
 extern int qsh_source(char **);
 
 static int (*builtin_funcs[])(char **) = {
-    &qsh_cd, &qsh_help, &qsh_exit, &qsh_pwd, &qsh_alias_builtin, &qsh_source};
+    &qsh_cd, &qsh_help, &qsh_exit, &qsh_pwd, &qsh_alias_builtin, &qsh_source, &qsh_echo};
 
 // Return the number of built-in functions
 int qsh_func_count(void)
