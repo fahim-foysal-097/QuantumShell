@@ -4,10 +4,71 @@ Quantum Shell (`qsh`) is a simple custom command-line shell.
 
 <img src="qsh_ss.png" alt="screenshot" height=512>
 
-## Usage
+## Installation
 
-Build :
-`make`
+qsh looks for config file `(.qshrc)` in `$HOME` directory.
 
-Run :
-`./qsh`
+##### First clone this repo :
+
+```sh
+git clone --depth 1 https://github.com/fahim-foysal-097/QuantumShell.git
+
+```
+
+##### Then :
+
+```sh
+cd QuantumnShell
+```
+
+### In Archlinux
+
+##### Install :
+
+```sh
+makepkg -si
+```
+
+##### Uninstall :
+
+```sh
+sudo pacman -R qsh
+```
+
+### In other systems
+
+This installs in /usr/local/bin
+
+##### Build :
+
+```sh
+make
+```
+
+##### Install :
+
+```sh
+sudo make install
+```
+
+##### Unistall :
+
+```sh
+sudo make uninstall
+```
+
+### Build yourself
+
+qsh looks for config file `(.qshrc)` in `$HOME` directory.
+
+##### Build :
+
+```sh
+make
+```
+
+##### Run :
+
+```sh
+./qsh
+```
