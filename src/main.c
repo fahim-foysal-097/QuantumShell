@@ -1,12 +1,13 @@
 #define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <stdlib.h>
-#include "parse.h"
-#include "read.h"
-#include "execute.h"
 #include "alias.h"
-#include "config.h"
 #include "builtins.h"
+#include "config.h"
+#include "execute.h"
+#include "parse.h"
+#include "prompt.h"
+#include "read.h"
 
 static void qsh_loop(void);
 
@@ -21,6 +22,8 @@ int main(void)
         snprintf(config_path, sizeof(config_path), "%s/.qshrc", home);
         load_config(config_path);
     }
+
+    // load_config(".qshrc");
 
     /* main loop */
     qsh_loop();
@@ -40,11 +43,25 @@ static void qsh_loop(void)
     do
     {
         /* print working dir */
-        char *a[] = {"", NULL};
-        qsh_pwd(a);
+        // char *a[] = {"", NULL};
+        // qsh_pwd(a);
 
-        printf("qsh> ");
+        // printf("qsh> ");
+
+        char *prompt = build_prompt();
+        if (prompt)
+        {
+            fputs(prompt, stdout);
+            free(prompt);
+        }
+        else
+        {
+            /* fallback */
+            fputs("qsh> ", stdout);
+        }
+
         cmd = qsh_read();
+
         if (!cmd)
             break; /* EOF */
 

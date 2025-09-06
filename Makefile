@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -std=c11 -Wall -Wextra -Iinclude -g
-SRCS = src/main.c src/parse.c src/read.c src/alias.c src/execute.c src/builtins.c src/config.c
+SRCS = src/main.c src/parse.c src/read.c src/alias.c src/execute.c src/builtins.c src/config.c src/prompt.c
 OBJ = $(SRCS:.c=.o)
 TARGET = qsh
 PREFIX = /usr/local

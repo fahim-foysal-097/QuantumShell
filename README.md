@@ -21,7 +21,7 @@ git clone --depth 1 https://github.com/fahim-foysal-097/QuantumShell.git
 cd QuantumnShell
 ```
 
-### In Archlinux
+### In Archlinux (not implemented yet)
 
 ##### Install :
 
