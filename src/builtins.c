@@ -2,6 +2,7 @@
 #include "builtins.h"
 #include "parse.h"
 #include "config.h"
+#include "execute.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -11,13 +12,17 @@
 /* built-in cd */
 int qsh_cd(char **args)
 {
+    qsh_last_status = 0; /* assume success */
     if (!args || !args[1] || strcmp(args[1], "~") == 0)
     {
         const char *home = getenv("HOME");
         if (!home)
             home = "/";
         if (chdir(home) != 0)
+        {
             perror("qsh");
+            qsh_last_status = 1;
+        }
     }
     else if (strcmp(args[1], "-") == 0)
     {
@@ -25,17 +30,24 @@ int qsh_cd(char **args)
         if (oldpwd)
         {
             if (chdir(oldpwd) != 0)
+            {
                 perror("qsh");
+                qsh_last_status = 1;
+            }
         }
         else
         {
             fprintf(stderr, "qsh: OLDPWD not set\n");
+            qsh_last_status = 1;
         }
     }
     else
     {
         if (chdir(args[1]) != 0)
+        {
             perror("qsh");
+            qsh_last_status = 1;
+        }
     }
     return 1;
 }
@@ -59,6 +71,7 @@ int qsh_help(char **args)
 int qsh_exit(char **args)
 {
     (void)args;
+    qsh_last_status = 0;
     return 0;
 }
 
@@ -68,16 +81,20 @@ int qsh_pwd(char **args)
     (void)args;
     char *dir = getcwd(NULL, 0);
     if (!dir)
+    {
         perror("qsh");
+        qsh_last_status = 1;
+    }
     else
     {
         printf("%s\n", dir);
         free(dir);
+        qsh_last_status = 0;
     }
     return 1;
 }
 
-/* source built-in: uses load_config_once on given file */
+/* source builtin: uses load_config_once on given file */
 int qsh_source(char **args)
 {
     const char *file = ".qshrc";

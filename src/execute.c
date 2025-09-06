@@ -24,6 +24,9 @@ extern int qsh_source(char **);
 static int (*builtin_funcs[])(char **) = {
     &qsh_cd, &qsh_help, &qsh_exit, &qsh_pwd, &qsh_alias_builtin, &qsh_source, &qsh_echo};
 
+/* Global last status (0 == success). Visible to prompt.c via execute.h */
+int qsh_last_status = 0;
+
 // Return the number of built-in functions
 int qsh_func_count(void)
 {
@@ -43,16 +46,16 @@ int new_process(char **args)
         if (execvp(args[0], args) == -1)
         {
             perror("qsh");
-            free_args(args); // not important, but cleaner
-
             /* _exit to avoid flushing stdio buffers owned by the parent. */
-            _exit(EXIT_FAILURE);
+            _exit(127);
         }
     }
     else if (pid < 0)
     {
         // Error forking
         perror("qsh");
+        /* update last status to indicate failure to spawn */
+        qsh_last_status = 1;
     }
     else
     {
@@ -62,12 +65,25 @@ int new_process(char **args)
             wpid = waitpid(pid, &status, WUNTRACED);
             if (wpid == -1)
             {
-                perror("qsh");
+                perror("waitpid");
                 exit(EXIT_FAILURE);
             }
         } while (!WIFEXITED(status) && !WIFSIGNALED(status));
-    }
 
+        if (WIFEXITED(status))
+        {
+            qsh_last_status = WEXITSTATUS(status);
+        }
+        else if (WIFSIGNALED(status))
+        {
+            /* Common convention: 128 + signal number */
+            qsh_last_status = 128 + WTERMSIG(status);
+        }
+        else
+        {
+            qsh_last_status = 1; /* generic failure */
+        }
+    }
     return 1;
 }
 
@@ -87,6 +103,7 @@ int qsh_execute(char **args)
             int status = (*builtin_funcs[i])(expanded_args);
             if (expanded_args != args)
                 free_args(expanded_args);
+
             return status;
         }
     }

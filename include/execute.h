@@ -24,4 +24,11 @@ int qsh_execute(char **args);
  */
 int new_process(char **args);
 
+/**
+ * @brief Last exit status (0 == success). Updated by execution code.
+ *
+ * This is global state read by prompt code to show a success/failure indicator.
+ */
+extern int qsh_last_status;
+
 #endif // QSH_EXECUTE_H

@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
+#include "execute.h"
 #include "prompt.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,6 +17,8 @@
 #define COL_GIT "\x1b[0;33m"      /* yellow */
 #define COL_TIME "\x1b[2;37m"     /* dim gray */
 #define COL_ARROW "\x1b[1;37m"    /* bright white */
+#define COL_SUCCESS "\x1b[1;32m"  /* green */
+#define COL_FAIL "\x1b[1;31m"     /* red */
 #define PRE_SIMBL "λ"             /* Prefix*/
 
 /* Checks if stdout is connected to a terminal (TTY). */
@@ -91,7 +94,9 @@ static char *get_git_branch(void)
         pclose(fp);
         return NULL;
     }
+
     pclose(fp);
+
     /* trim newline */
     size_t n = strlen(buf);
     while (n > 0 && (buf[n - 1] == '\n' || buf[n - 1] == '\r'))
@@ -150,12 +155,37 @@ char *build_prompt(void)
     localtime_r(&now, &tm);
     strftime(tbuf, sizeof(tbuf), "%H:%M", &tm);
 
+    /* Build exit-status indicator */
+    char indicator[128] = "";
+    if (tty)
+    {
+        if (qsh_last_status == 0)
+        {
+            snprintf(indicator, sizeof(indicator), COL_SUCCESS "✔" ANSI_RESET " ");
+        }
+        else
+        {
+            snprintf(indicator, sizeof(indicator), COL_FAIL "✘(%d)" ANSI_RESET " ", qsh_last_status);
+        }
+    }
+    else
+    {
+        if (qsh_last_status == 0)
+        {
+            snprintf(indicator, sizeof(indicator), "OK ");
+        }
+        else
+        {
+            snprintf(indicator, sizeof(indicator), "ERR(%d) ", qsh_last_status);
+        }
+    }
+
     /* Build final prompt string */
     /* Example with colors:
        USER@HOST:CWD ( branch) HH:MM\nλ
     */
     const char *fmt_color =
-        "%s" COL_USERHOST "%s@%s" ANSI_RESET ":" COL_CWD "%s" ANSI_RESET " %s" COL_TIME "%s" ANSI_RESET "\n" COL_ARROW PRE_SIMBL " " ANSI_RESET;
+        "%s" /* indicator */ COL_USERHOST "%s@%s" ANSI_RESET ":" COL_CWD "%s" ANSI_RESET " %s" COL_TIME "%s" ANSI_RESET "\n" COL_ARROW PRE_SIMBL " " ANSI_RESET;
     const char *fmt_no_color =
         "%s@%s:%s %s\n" PRE_SIMBL " ";
 
@@ -170,7 +200,7 @@ char *build_prompt(void)
     size_t needed = 0;
     if (tty)
     {
-        needed = strlen(fmt_color) + strlen(user) + strlen(host) + strlen(cwd) + strlen(git_piece) + strlen(tbuf) + 100;
+        needed = strlen(fmt_color) + strlen(indicator) + strlen(user) + strlen(host) + strlen(cwd) + strlen(git_piece) + strlen(tbuf) + 100;
     }
     else
     {
@@ -196,7 +226,7 @@ char *build_prompt(void)
             snprintf(colored_git, sizeof(colored_git), COL_GIT "%s" ANSI_RESET, git_piece);
         }
         snprintf(out, needed, fmt_color, "", user, host, cwd, (branch ? colored_git : ""), tbuf);
-        /* fmt_color expects 6 format tokens; we used an empty prefix for alignment */
+        /* fmt_color expects 6 format tokens; using an empty prefix for alignment */
     }
     else
     {
