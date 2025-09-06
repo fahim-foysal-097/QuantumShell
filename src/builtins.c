@@ -1,4 +1,7 @@
 #define _POSIX_C_SOURCE 200809L
+#define RED "\033[31m"
+#define RESET "\033[0m"
+#include <errno.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,7 +31,7 @@ int qsh_cd(char **args)
             home = "/";
         if (chdir(home) != 0)
         {
-            perror("qsh");
+            fprintf(stderr, "cd: %sHOME%s ('~') not set\n", RED, RESET);
             qsh_last_status = 1;
         }
         return 1;
@@ -47,7 +50,7 @@ int qsh_cd(char **args)
         }
         else
         {
-            fprintf(stderr, "qsh: OLDPWD not set\n");
+            fprintf(stderr, "cd :OLDPWD not set\n");
             qsh_last_status = 1;
         }
         return 1;
@@ -97,7 +100,7 @@ int qsh_cd(char **args)
 
             if (end_index == -1)
             {
-                fprintf(stderr, "qsh: unmatched quote in cd argument\n");
+                fprintf(stderr, "cd: unmatched quote in cd argument\n");
                 qsh_last_status = 1;
                 return 1;
             }
@@ -190,7 +193,8 @@ int qsh_cd(char **args)
     /* Attempt to chdir */
     if (chdir(final_path) != 0)
     {
-        perror("qsh");
+        // perror("qsh");
+        fprintf(stderr, "cd: %s: %s%s%s\n",strerror(errno), RED, final_path, RESET);
         qsh_last_status = 1;
     }
     else
@@ -231,6 +235,7 @@ int qsh_pwd(char **args)
 {
     (void)args;
     char *dir = getcwd(NULL, 0);
+
     if (!dir)
     {
         perror("qsh");
@@ -249,9 +254,11 @@ int qsh_pwd(char **args)
 int qsh_source(char **args)
 {
     const char *file = ".qshrc";
+
     if (args && args[1])
         file = args[1];
     load_config(file);
+
     return 1;
 }
 
