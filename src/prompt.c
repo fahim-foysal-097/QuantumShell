@@ -1,13 +1,13 @@
 #define _POSIX_C_SOURCE 200809L
-#include "execute.h"
-#include "prompt.h"
+#include <limits.h>
+#include <pwd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-#include <pwd.h>
-#include <limits.h>
 #include <time.h>
+#include <unistd.h>
+#include "execute.h"
+#include "prompt.h"
 
 /* Color codes */
 #define ANSI_RESET "\x1b[0m"
@@ -225,7 +225,7 @@ char *build_prompt(void)
         {
             snprintf(colored_git, sizeof(colored_git), COL_GIT "%s" ANSI_RESET, git_piece);
         }
-        snprintf(out, needed, fmt_color, "", user, host, cwd, (branch ? colored_git : ""), tbuf);
+        snprintf(out, needed, fmt_color, indicator, user, host, cwd, (branch ? colored_git : ""), tbuf);
         /* fmt_color expects 6 format tokens; using an empty prefix for alignment */
     }
     else

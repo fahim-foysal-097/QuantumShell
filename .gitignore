@@ -10,6 +10,7 @@ pkg/
 # Others
 .qshrc
 single.c
+TODO.txt
 
 # Editor / IDE files
 .vscode/

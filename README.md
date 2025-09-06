@@ -34,7 +34,7 @@ makepkg -si
 ##### Uninstall :
 
 ```sh
-sudo pacman -R qsh
+sudo pacman -R qsh qsh-debug
 ```
 
 ### In other systems

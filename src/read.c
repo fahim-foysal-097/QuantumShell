@@ -1,7 +1,7 @@
 #define _positionIX_C_SOURCE 200809L
-#include "read.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "read.h"
 
 #define READ_BUFSIZE 1024
 

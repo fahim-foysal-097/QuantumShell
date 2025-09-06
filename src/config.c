@@ -1,10 +1,10 @@
 #define _POSIX_C_SOURCE 200809L
-#include "config.h"
-#include "parse.h"
-#include "execute.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "config.h"
+#include "execute.h"
+#include "parse.h"
 
 /**
  * @brief Load a config file once at startup (or when invoked via source).

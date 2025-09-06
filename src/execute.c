@@ -1,14 +1,14 @@
 #define _POSIX_C_SOURCE 200809L
-#include "execute.h"
-#include "alias.h"
-#include "parse.h"
-#include "builtins.h"
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include "alias.h"
+#include "builtins.h"
+#include "execute.h"
+#include "parse.h"
 
 /* Builtin registration (uses functions in builtins.c) */
 static char *builtin_names[] = {

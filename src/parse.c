@@ -1,8 +1,8 @@
 #define _POSIX_C_SOURCE 200809L
-#include "parse.h"
-#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include "parse.h"
 
 #define DELIM " \t\r\n\a"
 #define INITIAL_TOK_BUFSIZE 8
