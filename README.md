@@ -21,11 +21,13 @@ git clone --depth 1 https://github.com/fahim-foysal-097/QuantumShell.git
 cd QuantumnShell
 ```
 
-### In Archlinux (not implemented yet)
+### In Archlinux
 
 ##### Install :
 
 ```sh
+make clean
+make
 makepkg -si
 ```
 
@@ -37,7 +39,7 @@ sudo pacman -R qsh
 
 ### In other systems
 
-This installs in /usr/local/bin
+This installs in `/usr/local/bin`
 
 ##### Build :
 

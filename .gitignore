@@ -1,5 +1,15 @@
+# Compiled binaries
 qsh
-a.out
-single.c
+*.o
+*.so
+
+# Build directories
+pkg/
+*.tar.zst
+
+# Others
 .qshrc
+single.c
+
+# Editor / IDE files
 .vscode/
