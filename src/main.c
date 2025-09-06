@@ -42,12 +42,6 @@ static void qsh_loop(void)
 
     do
     {
-        /* print working dir */
-        // char *a[] = {"", NULL};
-        // qsh_pwd(a);
-
-        // printf("qsh> ");
-
         char *prompt = build_prompt();
         if (prompt)
         {

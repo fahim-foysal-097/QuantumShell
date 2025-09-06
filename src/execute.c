@@ -9,6 +9,7 @@
 #include "builtins.h"
 #include "execute.h"
 #include "parse.h"
+#include "vars.h"
 
 /* Builtin registration (uses functions in builtins.c) */
 static char *builtin_names[] = {
@@ -94,6 +95,9 @@ int qsh_execute(char **args)
 
     /* append full alias (if any) command */
     char **expanded_args = expand_alias(args);
+
+    /* expand environment variables in all tokens (in-place) */
+    expand_variables_inplace(expanded_args);
 
     /* check builtins */
     for (int i = 0; i < qsh_func_count(); i++)
