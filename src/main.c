@@ -66,6 +66,12 @@ static void qsh_loop(void)
         }
 
         args = qsh_parse(cmd);
+        if (!args)
+        {
+            free(cmd);
+            qsh_last_status = 1;
+            continue;
+        }
         status = qsh_execute(args);
 
         free(cmd);

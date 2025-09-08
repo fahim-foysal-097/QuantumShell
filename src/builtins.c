@@ -193,8 +193,7 @@ int qsh_cd(char **args)
     /* Attempt to chdir */
     if (chdir(final_path) != 0)
     {
-        // perror("qsh");
-        fprintf(stderr, "cd: %s: %s%s%s\n",strerror(errno), RED, final_path, RESET);
+        fprintf(stderr, "cd: %s: %s%s%s\n", strerror(errno), RED, final_path, RESET);
         qsh_last_status = 1;
     }
     else
@@ -266,7 +265,8 @@ int qsh_source(char **args)
  * @brief Echo builtin.
  *
  * Supports:
- *   - "-n" option: do not print trailing newline.
+ *   - "-n" option: do not print trailing newline. &
+ *   - Strips surrounding quotes (single or double) from each argument.
  * @param args Null-terminated argument vector. args[0] = "echo"
  * @return Always returns 1 (shell should continue)
  */
@@ -295,5 +295,6 @@ int qsh_echo(char **args)
     if (newline)
         putchar('\n');
 
+    qsh_last_status = 0;
     return 1;
 }
