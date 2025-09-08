@@ -1,5 +1,6 @@
 #define _POSIX_C_SOURCE 200809L
 #include "alias.h"
+#include "execute.h"
 #include "parse.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -144,6 +145,7 @@ int qsh_alias_builtin(char **args)
     if (!args || !args[1])
     {
         print_aliases();
+        qsh_last_status = 0;
         return 1;
     }
 
@@ -173,6 +175,7 @@ int qsh_alias_builtin(char **args)
     {
         fprintf(stderr, "Usage: alias name='command'\n");
         free(joined_args);
+        qsh_last_status = 1;
         return 1;
     }
 
@@ -185,11 +188,13 @@ int qsh_alias_builtin(char **args)
     {
         fprintf(stderr, "Usage: alias name='command'\n");
         free(joined_args);
+        qsh_last_status = 1;
         return 1;
     }
 
     set_alias(name, command);
     free(joined_args);
+    qsh_last_status = 0;
     return 1;
 }
 
