@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include "execute.h" /* to expand $? using qsh_last_status */
 #include "vars.h"
 
 /**
@@ -90,7 +91,18 @@ static char *expand_token(const char *s)
                 continue;
             }
 
-            /* ${VAR} form */
+            /* handle $? -> last exit status */
+            if (i + 1 < slen && s[i + 1] == '?')
+            {
+                char stbuf[32];
+                snprintf(stbuf, sizeof(stbuf), "%d", qsh_last_status);
+                if (append_str(&out, &out_cap, &out_len, stbuf) < 0)
+                    goto oom;
+                i++; /* consumed '?' */
+                continue;
+            }
+
+            /* ${...} form */
             if (i + 1 < slen && s[i + 1] == '{')
             {
                 size_t j = i + 2;
@@ -106,6 +118,16 @@ static char *expand_token(const char *s)
                 }
                 /* name is s[i+2 .. j-1] */
                 size_t namelen = j - (i + 2);
+                if (namelen == 1 && s[i + 2] == '?')
+                {
+                    /* special braced form ${?} -> last status */
+                    char stbuf[32];
+                    snprintf(stbuf, sizeof(stbuf), "%d", qsh_last_status);
+                    if (append_str(&out, &out_cap, &out_len, stbuf) < 0)
+                        goto oom;
+                    i = j; /* advance past '}' */
+                    continue;
+                }
                 char name[namelen + 1];
                 memcpy(name, s + i + 2, namelen);
                 name[namelen] = '\0';
