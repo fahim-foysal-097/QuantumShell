@@ -218,6 +218,7 @@ int qsh_help(char **args)
     printf("  pwd                   print working directory\n");
     printf("  alias                 list aliases\n");
     printf("  source <file>         source a configuration file\n");
+    printf("  echo                  writes input text to standard output\n");
     return 1;
 }
 
