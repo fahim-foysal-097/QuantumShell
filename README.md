@@ -2,7 +2,16 @@
 
 Quantum Shell (`qsh`) is a simple custom command-line shell.
 
-<img src="qsh_ss.png" alt="screenshot" height=512>
+<img src="qsh_ss.png" alt="screenshot" height=720>
+
+## Built-ins
+
+- cd
+- pwd
+- alias
+- echo
+- exit
+- help
 
 ## Installation
 
